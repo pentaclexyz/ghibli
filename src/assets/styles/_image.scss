@@ -1,0 +1,14 @@
+img {
+  margin: 0 0 .75rem 0;
+  height: auto;
+  width: 100%;
+}
+
+@media only screen and (min-width: 889px) {
+
+  img {
+    margin: 0 .75rem .75rem 0;
+    height: 13rem;
+    width: auto;
+  }
+}

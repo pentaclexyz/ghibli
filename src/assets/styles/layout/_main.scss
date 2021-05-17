@@ -1,0 +1,31 @@
+main {
+  margin: 0 auto;
+  max-width: 80rem;
+  padding: .75rem 0 5rem 0;
+
+  a {
+    fill: rgba(255,255,255,.65);
+  }
+}
+
+.circle-sm {
+  radius: 1rem;
+}
+
+svg g g text, g, svg {
+  color: _color(body-text);
+}
+
+
+svg g g text a {
+  color: _color(body-text);
+}
+
+@media only screen and (min-width: 889px) {
+
+  main {
+    padding: .75rem 0 0 5rem;
+  }
+
+}
+

@@ -1,0 +1,15 @@
+.editorial-content {
+  width:100%;
+}
+
+@media only screen and (min-width: _breakpoint(step-two)) {
+  .editorial-content {
+    max-width: 45rem;
+    width: 49%;
+
+    &.full-width {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+}

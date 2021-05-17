@@ -1,0 +1,22 @@
+header {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: _color(bg-header);
+  text-align: center;
+  padding: .5rem 0;
+  color: _color(primary);
+
+  a {
+    font-size: .875rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: _color(primary);
+  }
+}
+
+
