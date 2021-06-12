@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../components/layout';
 import useIntersectionObserver from '@react-hook/intersection-observer';
 
-const baseUrl = 'http://173.249.12.47:8080';
+const baseUrl = 'https://b0910e2e8a31.ngrok.io';
 const Img = ({ path, thumb }) => {
   const [ref, setRef] = useState();
   const { isIntersecting } = useIntersectionObserver(ref);

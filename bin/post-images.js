@@ -31,7 +31,7 @@ let progress = 0;
 const token = process.env.COCKPIT_API_KEY;
 
 if (!token) {
-  console.error('Please add your token to .env file from http://173.249.12.47:8080/restadmin/index');
+  console.error('Please add your token to .env file from https://b0910e2e8a31.ngrok.io/restadmin/index');
   process.exit(1);
 }
 const folderId= '60c4db7be789842acc20e201'; // Ghibli gifs!
@@ -82,7 +82,7 @@ const getUploadFn = (buffers) => {
   };
 
   return from(
-    fetch(`http://173.249.12.47:8080/api/cockpit/addAssets?token=${token}`, requestOptions)
+    fetch(`https://b0910e2e8a31.ngrok.io/api/cockpit/addAssets?token=${token}`, requestOptions)
       .then(response => response.text())
       .then(result => {
         progress += buffers.length;
