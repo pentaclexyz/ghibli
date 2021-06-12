@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/layout';
 import useIntersectionObserver from '@react-hook/intersection-observer';
+require('dotenv').config();
 
 const baseUrl = 'https://b0910e2e8a31.ngrok.io';
 const Img = ({ path, thumb }) => {
@@ -21,10 +22,11 @@ const Img = ({ path, thumb }) => {
 
 export const Main = () => {
   const [images, setImages] = useState([]);
+  const token = process.env.REACT_APP_COCKPIT_API_KEY;
 
   useEffect(() => {
     fetch(
-      `${baseUrl}/api/cockpit/assets?token=7cd55d17658deb489b779ef537a864`,
+      `${baseUrl}/api/cockpit/assets?token=${token}`,
       {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
@@ -40,7 +42,7 @@ export const Main = () => {
             .map(({ path, _id }) => ({ path, _id }))
             .map(async ({ path, _id }) => {
               const params = new URLSearchParams();
-              params.append('token', '7cd55d17658deb489b779ef537a864');
+              params.append('token', token);
               params.append('src', _id);
               params.append('w', '200');
               params.append('m', 'bestFit');
@@ -58,7 +60,7 @@ export const Main = () => {
 
         setImages(img);
       });
-  }, []);
+  }, [token]);
 
   return (
     <Layout>

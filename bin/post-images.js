@@ -28,7 +28,7 @@ Object.defineProperty(Array.prototype, 'chunk_inefficient', {
 
 let amt;
 let progress = 0;
-const token = process.env.COCKPIT_API_KEY;
+const token = process.env.REACT_APP_COCKPIT_API_KEY;
 
 if (!token) {
   console.error('Please add your token to .env file from https://b0910e2e8a31.ngrok.io/restadmin/index');
