@@ -6,12 +6,14 @@ import { BottomScrollListener } from 'react-bottom-scroll-listener';
 const pageSize = 15;
 
 const baseUrl = 'https://b0910e2e8a31.ngrok.io';
-const Img = ({ path, thumb }) => {
+const Img = ({ path, thumb, id }) => {
   const [ref, setRef] = useState();
-  const { isIntersecting } = useIntersectionObserver(ref);
+  const { isIntersecting } = useIntersectionObserver(ref, {
+    rootMargin: '200px 0px 600px 0px',
+  });
   return (
     <img
-      key={path}
+      id={id}
       ref={setRef}
       src={isIntersecting ? path : thumb}
       alt="Studio Ghibli Animation"
@@ -29,12 +31,13 @@ export const Main = () => {
   const mapAssets = ({ path, _id }) => ({ path, _id });
 
   const fetchThumb = useCallback(
-    ({ params, path }) =>
+    ({ params, path, id }) =>
       fetch(`${baseUrl}/api/cockpit/image?${params.toString()}`)
         .then((res) => res.text())
         .then((res) => ({
           path: `${baseUrl}/storage/uploads${path}`,
           thumb: res,
+          id,
         })),
     []
   );
@@ -46,10 +49,10 @@ export const Main = () => {
           const params = new URLSearchParams();
           params.append('token', token);
           params.append('src', _id);
-          params.append('w', '200');
+          params.append('h', '200');
           params.append('m', 'bestFit');
 
-          return await fetchThumb({ path, params });
+          return await fetchThumb({ path, params, id: _id });
         })
       );
     },
@@ -92,23 +95,23 @@ export const Main = () => {
       const result = [];
       const map = new Map();
       for (const item of [...currentImages, ...loaded]) {
-          if(!map.has(item.path)){
-              map.set(item.path, true);
-              result.push(item);
-          }
+        if (!map.has(item.path)) {
+          map.set(item.path, true);
+          result.push(item);
+        }
       }
       setCurrentImages(result);
       setRemainingImages(remaining);
       setLoading(false);
     }
-  },[loadBatch, currentImages, remainingImages, setLoading, loading]);
+  }, [loadBatch, currentImages, remainingImages, setLoading, loading]);
 
   return (
     <Layout>
       <BottomScrollListener offset={1500} onBottom={bottomScrollCallback}>
-        <section style={{marginBottom: '5rem'}}>
-          {currentImages.map(({ path, thumb }) => (
-            <Img path={path} thumb={thumb} key={path} />
+        <section style={{ marginBottom: '5rem' }}>
+          {currentImages.map((item) => (
+            <Img key={item.id} {...item} />
           ))}
         </section>
         {loading && <span>Loading...</span>}
