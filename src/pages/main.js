@@ -5,7 +5,7 @@ import { BottomScrollListener } from 'react-bottom-scroll-listener';
 
 const pageSize = 15;
 
-const baseUrl = 'https://474b1efc351c.ngrok.io';
+const baseUrl = 'https://cms.0xalice.dev';
 const Img = ({ path, thumb, id }) => {
   const [ref, setRef] = useState();
   const { isIntersecting } = useIntersectionObserver(ref, {
@@ -36,7 +36,7 @@ export const Main = () => {
         .then((res) => res.text())
         .then((res) => ({
           path: `${baseUrl}/storage/uploads${path}`,
-          thumb: res,
+          thumb: res.replace('http://127.0.0.1:8080', baseUrl),
           id,
         })),
     []
