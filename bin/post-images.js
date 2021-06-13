@@ -82,7 +82,7 @@ const getUploadFn = (buffers) => {
   };
 
   return from(
-    fetch(`hhttps://cms.0xalice.dev/api/cockpit/addAssets?token=${token}`, requestOptions)
+    fetch(`https://cms.0xalice.dev/api/cockpit/addAssets?token=${token}`, requestOptions)
       .then(response => response.text())
       .then(result => {
         progress += buffers.length;
