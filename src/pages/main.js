@@ -5,7 +5,7 @@ import { BottomScrollListener } from 'react-bottom-scroll-listener';
 
 const pageSize = 15;
 
-const baseUrl = 'https://b0910e2e8a31.ngrok.io';
+const baseUrl = 'https://474b1efc351c.ngrok.io';
 const Img = ({ path, thumb, id }) => {
   const [ref, setRef] = useState();
   const { isIntersecting } = useIntersectionObserver(ref, {
