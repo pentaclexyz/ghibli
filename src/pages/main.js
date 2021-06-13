@@ -36,7 +36,7 @@ export const Main = () => {
         .then((res) => res.text())
         .then((res) => ({
           path: `${baseUrl}/storage/uploads${path}`,
-          thumb: res,
+          thumb: res.replace('http://127.0.0.1:8080', baseUrl),
           id,
         })),
     []
