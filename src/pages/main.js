@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import Layout from "../components/layout";
+import React, { useCallback, useEffect, useState } from 'react';
+import Layout from '../components/layout';
+import useIntersectionObserver from '@react-hook/intersection-observer';
+import { BottomScrollListener } from 'react-bottom-scroll-listener';
 
+const pageSize = 15;
 
 const baseUrl = 'https://cms.0xalice.dev';
 const Img = ({ path, thumb, id }) => {
   const [ref, setRef] = useState();
-  const { isIntersecting } = useIntersectionObserve(ref, {
+  const { isIntersecting } = useIntersectionObserver(ref, {
     rootMargin: '200px 0px 600px 0px',
   });
   return (
@@ -19,54 +22,112 @@ const Img = ({ path, thumb, id }) => {
   );
 };
 
-
 export const Main = () => {
-    return (
-        <Layout>
-            <section>
-                <img src={arietty} alt="studio ghibli"/>
-                <img src={butterfly} alt="studio ghibli"/>
-                <img src={cat} alt="studio ghibli"/>
-                <img src={dragon} alt="studio ghibli"/>
-                <img src={ephemeris} alt="studio ghibli"/>
-                <img src={farming} alt="studio ghibli"/>
-                <img src={forestspirit} alt="studio ghibli"/>
-                <img src={lake} alt="studio ghibli"/>
-                <img src={heart} alt="studio ghibli"/>
-                <img src={howl} alt="studio ghibli"/>
-                <img src={howlasleep} alt="studio ghibli"/>
-                <img src={howllook} alt="studio ghibli"/>
-                <img src={kaguya} alt="studio ghibli"/>
-                <img src={kaguya02} alt="studio ghibli"/>
-                <img src={kaguya03} alt="studio ghibli"/>
-                <img src={kaguyafarm} alt="studio ghibli"/>
+  const [currentImages, setCurrentImages] = useState([]);
+  const [remainingImages, setRemainingImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const token = '7ae367e5d5044051ba2536f96e3a85';
 
-                <img src={kiki01} alt="studio ghibli"/>
-                <img src={kiki02} alt="studio ghibli"/>
-                <img src={kiki03} alt="studio ghibli"/>
-                <img src={mononoke01} alt="studio ghibli"/>
-                <img src={mononoke02} alt="studio ghibli"/>
-                <img src={mononoke03} alt="studio ghibli"/>
-                <img src={nausicaa} alt="studio ghibli"/>
-                <img src={ponyo01} alt="studio ghibli"/>
-                <img src={ponyo02} alt="studio ghibli"/>
-                <img src={ponyo03} alt="studio ghibli"/>
-                <img src={ponyo04} alt="studio ghibli"/>
-                <img src={ponyo05} alt="studio ghibli"/>
-                <img src={ponyo06} alt="studio ghibli"/>
-                <img src={ponyo07} alt="studio ghibli"/>
-                <img src={ponyo08} alt="studio ghibli"/>
-                <img src={poppyHill} alt="studio ghibli"/>
-                <img src={rainbow} alt="studio ghibli"/>
-                <img src={smoking} alt="studio ghibli"/>
-                <img src={runMononoke} alt="studio ghibli"/>
-                <img src={sophieNight} alt="studio ghibli"/>
-                <img src={sophieRun} alt="studio ghibli"/>
-                <img src={totoroPls} alt="studio ghibli"/>
-                <img src={totoroRain} alt="studio ghibli"/>
-                <img src={waterReflection} alt="studio ghibli"/>
-                <img src={sosuke02} alt="studio ghibli"/>
-            </section>
-        </Layout>
-    )
-}
+  const mapAssets = ({ path, _id }) => ({ path, _id });
+
+  const fetchThumb = useCallback(
+    ({ params, path, id }) =>
+      fetch(`${baseUrl}/api/cockpit/image?${params.toString()}`)
+        .then((res) => res.text())
+        .then((res) => ({
+          path: `${baseUrl}/storage/uploads${path}`,
+          thumb: res,
+          id,
+        })),
+    []
+  );
+
+  const loadBatch = useCallback(
+    (assets) => {
+      return Promise.all(
+        assets.map(mapAssets).map(async ({ path, _id }) => {
+          const params = new URLSearchParams();
+          params.append('token', token);
+          params.append('src', _id);
+          params.append('h', '200');
+          params.append('m', 'bestFit');
+
+          return await fetchThumb({ path, params, id: _id });
+        })
+      );
+    },
+    [fetchThumb]
+  );
+
+  const fetchAssets = useCallback(
+    () =>
+      fetch(`${baseUrl}/api/cockpit/assets?token=${token}`, {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filter: { folder: '60c4db7be789842acc20e201' },
+        }),
+      }).then((assets) => assets.json()),
+    []
+  );
+
+  useEffect(() => {
+    fetchAssets()
+      .then(async ({ assets }) => {
+        setLoading(true);
+        const initalAssets = assets.slice(0, 50);
+        const remainingAssets = assets.slice(50);
+        setRemainingImages(remainingAssets);
+
+        const batch = await loadBatch(initalAssets);
+        setCurrentImages(batch);
+        setLoading(false);
+      })
+      .catch((e) => alert(e));
+  }, [loadBatch, fetchAssets]);
+
+  const bottomScrollCallback = useCallback(async () => {
+    const gonnaLoad = remainingImages.slice(0, pageSize);
+    const remaining = remainingImages.slice(pageSize);
+    if (remaining.length && !loading) {
+      setLoading(true);
+      const loaded = await loadBatch(gonnaLoad);
+      const result = [];
+      const map = new Map();
+      for (const item of [...currentImages, ...loaded]) {
+        if (!map.has(item.path)) {
+          map.set(item.path, true);
+          result.push(item);
+        }
+      }
+      setCurrentImages(result);
+      setRemainingImages(remaining);
+      setLoading(false);
+    }
+  }, [loadBatch, currentImages, remainingImages, setLoading, loading]);
+
+  return (
+    <Layout>
+      <BottomScrollListener offset={1500} onBottom={bottomScrollCallback}>
+        <section>
+          {currentImages.map((item) => (
+            <Img key={item.id} {...item} />
+          ))}
+        </section>
+        {loading && (
+          <div className="spinner-container">
+            <div class="lds-heart">
+              <div></div>
+            </div>
+            <span>Loading...</span>
+          </div>
+        )}
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+      </BottomScrollListener>
+    </Layout>
+  );
+};
