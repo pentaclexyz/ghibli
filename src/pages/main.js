@@ -1,48 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/layout";
 
 
-import arietty from "../assets/images/gifs/arietty.gif";
-import butterfly from "../assets/images/gifs/butterfly.gif";
-import cat from "../assets/images/gifs/cat-gif.gif";
-import dragon from "../assets/images/gifs/dragon.gif";
-import ephemeris from "../assets/images/gifs/ephemeris.gif";
-import farming from "../assets/images/gifs/farming.gif";
-import forestspirit from "../assets/images/gifs/forest-spirit.gif";
-import lake from "../assets/images/gifs/ghibli-lake-flower.gif";
-import heart from "../assets/images/gifs/heart-swallow.gif";
-import howl from "../assets/images/gifs/howl.gif";
-import howlasleep from "../assets/images/gifs/howl-asleep.gif";
-import howllook from "../assets/images/gifs/howl-look.gif";
-import kaguya from "../assets/images/gifs/kaguya.gif";
-import kaguya02 from "../assets/images/gifs/kaguya-2.gif";
-import kaguya03 from "../assets/images/gifs/kaguya-3.gif";
-import kaguyafarm from "../assets/images/gifs/kaguya-farm.gif";
-import kiki01 from "../assets/images/gifs/kiki-boy.gif";
-import kiki02 from "../assets/images/gifs/kiki-waves.gif";
-import kiki03 from "../assets/images/gifs/kiki-window.gif";
-import mononoke01 from "../assets/images/gifs/mononoke-butterflies.gif";
-import mononoke02 from "../assets/images/gifs/mononoke-spirits.gif";
-import mononoke03 from "../assets/images/gifs/run-mononoke.gif";
-import nausicaa from "../assets/images/gifs/nausicaa-and-her-pet.gif";
-import ponyo01 from "../assets/images/gifs/ponyo-hug-1.gif";
-import ponyo02 from "../assets/images/gifs/ponyo-hug.gif";
-import ponyo03 from "../assets/images/gifs/ponyo-kiss.gif";
-import ponyo04 from "../assets/images/gifs/ponyo-moon.gif";
-import ponyo05 from "../assets/images/gifs/ponyo-mum.gif";
-import ponyo06 from "../assets/images/gifs/ponyo-running-3.gif";
-import ponyo07 from "../assets/images/gifs/ponyo-wake-up.gif";
-import ponyo08 from "../assets/images/gifs/ponyo.gif";
-import poppyHill from "../assets/images/gifs/poppy-hill-rain.gif";
-import rainbow from "../assets/images/gifs/rainbow-rowing.gif";
-import runMononoke from "../assets/images/gifs/run-mononoke.gif";
-import smoking from "../assets/images/gifs/smoking.gif";
-import sophieNight from "../assets/images/gifs/sophie-night.gif";
-import sophieRun from "../assets/images/gifs/sophie-run.gif";
-import sosuke02 from "../assets/images/gifs/sosuke-02.gif";
-import totoroPls from "../assets/images/gifs/totoro-pls.gif";
-import totoroRain from "../assets/images/gifs/totoro-rain.gif";
-import waterReflection from "../assets/images/gifs/water-reflection.gif";
+const baseUrl = 'https://cms.0xalice.dev';
+const Img = ({ path, thumb, id }) => {
+  const [ref, setRef] = useState();
+  const { isIntersecting } = useIntersectionObserve(ref, {
+    rootMargin: '200px 0px 600px 0px',
+  });
+  return (
+    <img
+      id={id}
+      ref={setRef}
+      src={isIntersecting ? path : thumb}
+      alt="Studio Ghibli Animation"
+      loading="lazy"
+    />
+  );
+};
 
 
 export const Main = () => {
