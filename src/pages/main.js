@@ -109,12 +109,24 @@ export const Main = () => {
   return (
     <Layout>
       <BottomScrollListener offset={1500} onBottom={bottomScrollCallback}>
-        <section style={{ marginBottom: '5rem' }}>
+        <section>
           {currentImages.map((item) => (
             <Img key={item.id} {...item} />
           ))}
         </section>
-        {loading && <span>Loading...</span>}
+        {loading && (
+          <div className="spinner-container">
+            <div class="lds-heart">
+              <div></div>
+            </div>
+            <span>Loading...</span>
+          </div>
+        )}
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
       </BottomScrollListener>
     </Layout>
   );
