@@ -16,7 +16,6 @@ svg g g text, g, svg {
   color: _color(body-text);
 }
 
-
 svg g g text a {
   color: _color(body-text);
 }
@@ -24,7 +23,7 @@ svg g g text a {
 @media only screen and (min-width: 889px) {
 
   main {
-    padding: .75rem 0 0 5rem;
+    padding: .75rem 0 5rem 0;
   }
 
 }
