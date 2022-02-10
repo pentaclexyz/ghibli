@@ -220,7 +220,7 @@ export const Main = () => {
             <section>
                 {gifs.map(gif => {
                     return <img src={gif.src} alt="studio ghibli" onClick={() => {
-                        if (gif.url == "https://en.wikipedia.org/wiki/Studio_Ghibli") {
+                        if (gif.url === "https://en.wikipedia.org/wiki/Studio_Ghibli") {
                             alert("Here is the main Ghibli wiki, dont know which movie this gif is from");
                         }
                         window.open(gif.url);
